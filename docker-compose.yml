@@ -1,0 +1,14 @@
+services:
+  ghost:
+    container_name: zachtaiji-com-blog
+    images: ghost:latest
+    restart: always
+    ports:
+      - "8080:2368"
+    env_file:
+      - ghost.env
+  db:
+    images: mysql:8.0.31
+    restart: always
+    env_file:
+      - mysql.env
