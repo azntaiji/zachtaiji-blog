@@ -1,15 +1,46 @@
 services:
-   index-test:
-    container_name: zachtaiji-com-test
-    image: nginx:latest
+  ghost:
+    container_name: zachtaiji-com-blog
+    image: ghost:latest
     restart: always
+    depends_on:
+      - db
+    ports:
+      - "8080:2368"
     volumes:
-      - ./html:/usr/share/nginx/html
+      - ./ghost:/var/lib/ghost/content:rw
+    links:
+      - db
     environment:
-      - VIRTUAL_HOST="zachtaiji.com"
-      - VIRTUAL_PORT="80:80"
-      - LETSENCRYPT_HOST="zachtaiji.com"
-      - LETSENCRYPT_EMAIL="zach@steelhead.design"
+      - VIRTUAL_HOST=zachtaiji.com,www.zachtaiji.com
+      - VIRTUAL_PORT=2368
+      - LETSENCRYPT_HOST=zachtaiji.com,www.zachtaiji.com
+      - LETSENCRYPT_EMAIL=zach@steelhead.design
+      - database__client=mysql
+      - database__connection__host=db
+      - database__connection__user=root
+      - database__connection__password=wind6biting7pushy
+      - database__connection__database=ghost_zachtaiji
+      - url=https://zachtaiji.com
+      - client_max_body_size=512M
     expose:
-      - "443:443"
-      - "80:80"
+      - 8080
+      - 2368
+    networks:
+      - nginx-proxynet
+  db:
+    image: mysql:8.0.31
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=wind6biting7pushy
+      - VIRTUAL_PORT=3306      
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - nginx-proxynet
+    expose:
+      - 3306
+networks:
+  nginx-proxynet:
+    name: nginx-proxynet
+    external: true

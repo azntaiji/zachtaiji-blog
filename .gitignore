@@ -1,2 +1,6 @@
 env/*
 mysql/*
+ghost/data/*
+ghost/logs/*
+ghost/settings/*
+ghost/themes/*
