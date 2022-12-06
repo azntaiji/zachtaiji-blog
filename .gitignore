@@ -4,3 +4,4 @@ ghost/data/*
 ghost/logs/*
 ghost/settings/*
 ghost/themes/*
+docker-compose.yml
