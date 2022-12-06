@@ -11,18 +11,8 @@ services:
       - ./ghost:/var/lib/ghost/content:rw
     links:
       - db
-    environment:
-      - VIRTUAL_HOST=zachtaiji.com,www.zachtaiji.com
-      - VIRTUAL_PORT=2368
-      - LETSENCRYPT_HOST=zachtaiji.com,www.zachtaiji.com
-      - LETSENCRYPT_EMAIL=zach@steelhead.design
-      - database__client=mysql
-      - database__connection__host=db
-      - database__connection__user=root
-      - database__connection__password=wind6biting7pushy
-      - database__connection__database=ghost_zachtaiji
-      - url=https://zachtaiji.com
-      - client_max_body_size=512M
+    env_file:
+      - env/ghost.env
     expose:
       - 8080
       - 2368
@@ -31,9 +21,8 @@ services:
   db:
     image: mysql:8.0.31
     restart: always
-    environment:
-      - MYSQL_ROOT_PASSWORD=wind6biting7pushy
-      - VIRTUAL_PORT=3306      
+    env_file:
+      - env/mysql.env    
     volumes:
       - ./mysql:/var/lib/mysql
     networks:
